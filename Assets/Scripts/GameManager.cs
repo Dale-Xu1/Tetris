@@ -3,31 +3,20 @@ using System.Collections;
 
 namespace Assets.Scripts
 {
-    class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
 
-        [SerializeField] private GameObject tilePrefab = null;
-        [SerializeField] private Transform tileParent = null;
-
-        [SerializeField] private int width = 10;
-        [SerializeField] private int height = 20;
+        public static GameManager Instance { get; set; }
 
 
+        [SerializeField] private float speed = 1f;
 
-        private void Start()
+        public float Speed => speed;
+
+
+        private void Awake()
         {
-            // Get bottom left position
-            float x = -width / 2f + 0.5f; // +0.5 to center tiles
-            float y = -height / 2f + 0.5f;
-
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    // Create tiles
-                    Instantiate(tilePrefab, new Vector2(x + i, y + j), Quaternion.identity, tileParent);
-                }
-            }    
+            Instance = this;
         }
 
     }
