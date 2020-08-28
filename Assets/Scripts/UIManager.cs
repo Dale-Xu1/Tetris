@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts
 {
@@ -41,6 +42,14 @@ namespace Assets.Scripts
             // Show game over screen
             finalScoreText.text = scoreText.text;
             gameOver.SetActive(true);
+        }
+
+
+        public void PlayAgain()
+        {
+            // Reload current scene
+            Time.timeScale = 1;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
     }
