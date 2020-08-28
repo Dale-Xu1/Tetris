@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Assets.Scripts
 {
-    public class GameManager : MonoBehaviour
+    class GameManager : MonoBehaviour
     {
 
         public static GameManager Instance { get; set; }
