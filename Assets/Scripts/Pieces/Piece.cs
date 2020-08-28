@@ -16,6 +16,7 @@ namespace Assets.Scripts.Pieces
                 Debug.Log("Game Over");
                 Time.timeScale = 0;
 
+                // TODO: Game over screen
                 yield break;
             }
 
@@ -34,7 +35,7 @@ namespace Assets.Scripts.Pieces
                 else
                 {
                     // Move down
-                    transform.Translate(Vector2.down);
+                    transform.Translate(Vector2.down, Space.World);
                 }
             }
         }
@@ -95,7 +96,18 @@ namespace Assets.Scripts.Pieces
                 return;
             }
 
-            transform.Translate((Vector2) translation);
+            transform.Translate((Vector2) translation, Space.World);
+        }
+
+        public void Rotate(float angle)
+        {
+            transform.Rotate(Vector3.forward, angle);
+
+            // Undo rotation if it causes collision
+            if (IsColliding(Vector2Int.zero))
+            {
+                transform.Rotate(Vector3.forward, -angle);
+            }
         }
 
     }

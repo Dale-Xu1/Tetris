@@ -40,7 +40,7 @@ namespace Assets.Scripts.Tiles
                     // Create tiles
                     Instantiate(tilePrefab, new Vector2(i, j) - offset, Quaternion.identity, tileParent);
                 }
-            }    
+            }
         }
 
 
@@ -72,7 +72,7 @@ namespace Assets.Scripts.Tiles
         public Vector2Int ToIndex(Vector2 position)
         {
             // Apply offset
-            return Vector2Int.FloorToInt(position + offset);
+            return Vector2Int.RoundToInt(position + offset);
         }
 
     }

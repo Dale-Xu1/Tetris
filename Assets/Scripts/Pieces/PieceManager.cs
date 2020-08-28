@@ -35,6 +35,16 @@ namespace Assets.Scripts.Pieces
             {
                 currentPiece.Translate(Vector2Int.right);
             }
+
+            // Rotate piece
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                currentPiece.Rotate(90);
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                currentPiece.Rotate(-90);
+            }
         }
 
 
