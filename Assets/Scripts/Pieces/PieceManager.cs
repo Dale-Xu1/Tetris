@@ -45,6 +45,12 @@ namespace Assets.Scripts.Pieces
             {
                 currentPiece.Rotate(-90);
             }
+
+            // Fall piece
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                currentPiece.Fall();
+            }
         }
 
 

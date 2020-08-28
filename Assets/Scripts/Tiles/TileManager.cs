@@ -6,7 +6,15 @@ namespace Assets.Scripts.Tiles
     class TileManager : MonoBehaviour
     {
 
+        public enum Side
+        {
+            LEFT,
+            RIGHT,
+            NONE,
+        }
+
         public static TileManager Instance { get; set; }
+
 
         [SerializeField] private GameObject tilePrefab = null;
         [SerializeField] private Transform tileParent = null;
@@ -46,9 +54,9 @@ namespace Assets.Scripts.Tiles
 
         public bool IsPositionFull(Vector2Int position)
         {
-            if (position.y < 0)
+            if (position.y < 0 || position.x < 0 || position.x >= width)
             {
-                // Bottom is always full
+                // Bottom and sides are always full
                 return true;
             }
             else if (position.y >= height)
@@ -59,6 +67,23 @@ namespace Assets.Scripts.Tiles
 
             return state[position.x, position.y];
         }
+
+        public Side IsCollidingWithSide(Vector2Int position)
+        {
+            if (position.x < 0)
+            {
+                return Side.LEFT;
+            }
+            else if (position.x >= width)
+            {
+                return Side.RIGHT;
+            }
+            else
+            {
+                return Side.NONE;
+            }
+        }
+
 
         public void SetPositionFull(Vector2Int position)
         {
