@@ -14,7 +14,7 @@ namespace Assets.Scripts.Tiles
             NONE,
         }
 
-        public static TileManager Instance { get; set; }
+        public static TileManager Instance { get; private set; }
 
 
         [SerializeField] private GameObject tilePrefab = null;
@@ -97,8 +97,11 @@ namespace Assets.Scripts.Tiles
             }
         }
 
-        public void RemoveRows()
+        public void RemoveRows(int points)
         {
+            // Add points for placing piece
+            GameManager.Instance.AddPoints(points);
+
             for (int j = 0; j < height; j++)
             {
                 for (int i = 0; i < width; i++)
@@ -120,6 +123,9 @@ namespace Assets.Scripts.Tiles
 
         private void RemoveRow(int j)
         {
+            // Add points for removing row
+            GameManager.Instance.AddPoints(width);
+
             // Destroy row
             for (int i = 0; i < width; i++)
             {

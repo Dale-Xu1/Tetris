@@ -6,7 +6,7 @@ namespace Assets.Scripts.Pieces
     class PieceManager : MonoBehaviour
     {
 
-        public static PieceManager Instance { get; set; }
+        public static PieceManager Instance { get; private set; }
 
 
         [SerializeField] private Piece[] pieces = null;

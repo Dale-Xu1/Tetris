@@ -8,6 +8,9 @@ namespace Assets.Scripts.Pieces
     class Piece : MonoBehaviour
     {
 
+        [SerializeField] private int points = 4;
+
+
         private IEnumerator Start()
         {
             if (IsColliding(Vector2Int.down))
@@ -82,7 +85,7 @@ namespace Assets.Scripts.Pieces
             }
 
             // Remove any rows created
-            tileManager.RemoveRows();
+            tileManager.RemoveRows(points);
 
             // Create new piece
             PieceManager.Instance.CreatePiece();
