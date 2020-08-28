@@ -10,6 +10,15 @@ namespace Assets.Scripts.Pieces
 
         private IEnumerator Start()
         {
+            if (TestStop())
+            {
+                // If piece is immediately invalid, game is over
+                Debug.Log("Game Over");
+                Time.timeScale = 0;
+
+                yield break;
+            }
+
             while (true)
             {
                 bool stop = TestStop();
@@ -53,10 +62,23 @@ namespace Assets.Scripts.Pieces
 
         private void Stop()
         {
-            // Transfer blocks to state
-            foreach (Transform child in transform)
+            Transform[] children = new Transform[transform.childCount];
+
+            for (int i = 0; i < transform.childCount; i++)
             {
-                // TODO
+                // Get block
+                Transform child = transform.GetChild(i);
+                children[i] = child;
+
+                // Set position to full
+                Block block = child.GetComponent<Block>();
+                TileManager.Instance.SetPositionFull(block.Position);
+            }
+
+            // Transfer blocks to state
+            foreach (Transform child in children)
+            {
+                child.SetParent(TileManager.Instance.transform);
             }
 
             // Create new piece

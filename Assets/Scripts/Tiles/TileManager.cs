@@ -9,6 +9,7 @@ namespace Assets.Scripts.Tiles
         public static TileManager Instance { get; set; }
 
         [SerializeField] private GameObject tilePrefab = null;
+        [SerializeField] private Transform tileParent = null;
 
         [SerializeField] private int width = 10;
         [SerializeField] private int height = 20;
@@ -37,7 +38,7 @@ namespace Assets.Scripts.Tiles
                 for (int j = 0; j < height; j++)
                 {
                     // Create tiles
-                    Instantiate(tilePrefab, new Vector2(i, j) - offset, Quaternion.identity, transform);
+                    Instantiate(tilePrefab, new Vector2(i, j) - offset, Quaternion.identity, tileParent);
                 }
             }    
         }
@@ -58,6 +59,15 @@ namespace Assets.Scripts.Tiles
 
             return state[position.x, position.y];
         }
+
+        public void SetPositionFull(Vector2Int position)
+        {
+            if (position.y < height)
+            {
+                state[position.x, position.y] = true;
+            }
+        }
+
 
         public Vector2Int ToIndex(Vector2 position)
         {
