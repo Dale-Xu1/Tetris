@@ -16,10 +16,7 @@ namespace Assets.Scripts.Pieces
             if (IsColliding(Vector2Int.down))
             {
                 // If piece is immediately invalid, game is over
-                Debug.Log("Game Over");
-                Time.timeScale = 0;
-
-                // TODO: Game over screen
+                GameManager.Instance.EndGame();
                 yield break;
             }
 

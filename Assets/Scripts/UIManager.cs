@@ -12,6 +12,9 @@ namespace Assets.Scripts
 
         [SerializeField] private Text scoreText = null;
 
+        [SerializeField] private GameObject gameOver = null;
+        [SerializeField] private Text finalScoreText = null;
+
 
         private void Awake()
         {
@@ -20,14 +23,24 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            // Listen for when score changes
-            GameManager.Instance.OnScoreUpdate += OnScoreUpdate;
+            // Listen for when data changes
+            GameManager gameManager = GameManager.Instance;
+
+            gameManager.OnScoreUpdate += OnScoreUpdate;
+            gameManager.OnGameOver += OnGameOver;
         }
 
 
         private void OnScoreUpdate(int score)
         {
             scoreText.text = score.ToString();
+        }
+
+        private void OnGameOver()
+        {
+            // Show game over screen
+            finalScoreText.text = scoreText.text;
+            gameOver.SetActive(true);
         }
 
     }

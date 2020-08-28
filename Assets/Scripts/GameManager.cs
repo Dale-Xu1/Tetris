@@ -16,6 +16,9 @@ namespace Assets.Scripts
         public delegate void ScoreHandler(int score);
         public event ScoreHandler OnScoreUpdate;
 
+        public delegate void GameOverHandler();
+        public event GameOverHandler OnGameOver;
+
 
         private void Awake()
         {
@@ -37,6 +40,13 @@ namespace Assets.Scripts
             speed = 1f - (score * 0.002f);
 
             OnScoreUpdate(score);
+        }
+
+
+        public void EndGame()
+        {
+            OnGameOver();
+            Time.timeScale = 0; // Stop game from running
         }
 
     }
