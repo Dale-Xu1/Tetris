@@ -11,6 +11,8 @@ namespace Assets.Scripts.Pieces
 
         [SerializeField] private Piece[] pieces = null;
 
+        private Piece currentPiece;
+
 
         private void Awake()
         {
@@ -22,12 +24,26 @@ namespace Assets.Scripts.Pieces
             CreatePiece();
         }
 
+        private void Update()
+        {
+            // Translate piece
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                currentPiece.Translate(Vector2Int.left);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                currentPiece.Translate(Vector2Int.right);
+            }
+        }
+
 
         public void CreatePiece()
         {
             // Selects and instantiates random piece
             Piece piece = pieces[Random.Range(0, pieces.Length)];
-            Instantiate(piece, transform);
+
+            currentPiece = Instantiate(piece, transform);
         }
 
     }

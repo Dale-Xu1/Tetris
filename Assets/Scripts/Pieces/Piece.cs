@@ -10,7 +10,7 @@ namespace Assets.Scripts.Pieces
 
         private IEnumerator Start()
         {
-            if (TestStop())
+            if (IsColliding(Vector2Int.down))
             {
                 // If piece is immediately invalid, game is over
                 Debug.Log("Game Over");
@@ -21,7 +21,7 @@ namespace Assets.Scripts.Pieces
 
             while (true)
             {
-                bool stop = TestStop();
+                bool stop = IsColliding(Vector2Int.down);
 
                 // Wait delay
                 yield return new WaitForSeconds(GameManager.Instance.Speed);
@@ -40,14 +40,14 @@ namespace Assets.Scripts.Pieces
         }
 
 
-        private bool TestStop()
+        private bool IsColliding(Vector2Int offset)
         {
             // Test if any piece cannot go down
             foreach (Transform child in transform)
             {
                 // Get block position
                 Block block = child.GetComponent<Block>();
-                Vector2Int position = block.Position + Vector2Int.down;
+                Vector2Int position = block.Position + offset;
 
                 // If position below any block is full
                 if (TileManager.Instance.IsPositionFull(position))
@@ -84,6 +84,18 @@ namespace Assets.Scripts.Pieces
             // Create new piece
             PieceManager.Instance.CreatePiece();
             Destroy(gameObject);
+        }
+
+
+        public void Translate(Vector2Int translation)
+        {
+            // If translation causes collision
+            if (IsColliding(translation))
+            {
+                return;
+            }
+
+            transform.Translate((Vector2) translation);
         }
 
     }
