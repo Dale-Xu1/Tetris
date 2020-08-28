@@ -61,6 +61,7 @@ namespace Assets.Scripts.Pieces
 
         private void Stop()
         {
+            TileManager tileManager = TileManager.Instance;
             Transform[] children = new Transform[transform.childCount];
 
             for (int i = 0; i < transform.childCount; i++)
@@ -71,14 +72,17 @@ namespace Assets.Scripts.Pieces
 
                 // Set position to full
                 Block block = child.GetComponent<Block>();
-                TileManager.Instance.SetPositionFull(block.Position);
+                tileManager.SetPositionFull(block);
             }
 
             // Transfer blocks to state
             foreach (Transform child in children)
             {
-                child.SetParent(TileManager.Instance.transform);
+                child.SetParent(tileManager.transform);
             }
+
+            // Remove any rows created
+            tileManager.RemoveRows();
 
             // Create new piece
             PieceManager.Instance.CreatePiece();

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Blocks;
 
 namespace Assets.Scripts.Tiles
 {
@@ -23,7 +24,7 @@ namespace Assets.Scripts.Tiles
         [SerializeField] private int height = 20;
 
         private Vector2 offset;
-        private bool[,] state;
+        private Block[,] state;
 
 
         private void Awake()
@@ -33,7 +34,7 @@ namespace Assets.Scripts.Tiles
 
         private void Start()
         {
-            state = new bool[width, height];
+            state = new Block[width, height];
 
             // Get bottom left position
             float x = width / 2f - 0.5f; // +0.5 to center tiles
@@ -65,7 +66,7 @@ namespace Assets.Scripts.Tiles
                 return false;
             }
 
-            return state[position.x, position.y];
+            return state[position.x, position.y] != null;
         }
 
         public Side IsCollidingWithSide(Vector2Int position)
@@ -85,11 +86,64 @@ namespace Assets.Scripts.Tiles
         }
 
 
-        public void SetPositionFull(Vector2Int position)
+        public void SetPositionFull(Block block)
         {
+            Vector2Int position = block.Position;
+
+            // Set block into state
             if (position.y < height)
             {
-                state[position.x, position.y] = true;
+                state[position.x, position.y] = block;
+            }
+        }
+
+        public void RemoveRows()
+        {
+            for (int j = 0; j < height; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    // Stop testing row if any column is not full
+                    if (state[i, j] == null)
+                    {
+                        goto Continue;
+                    }
+                }
+
+                // Remove row
+                RemoveRow(j);
+                j--;
+
+            Continue:;
+            }
+        }
+
+        private void RemoveRow(int j)
+        {
+            // Destroy row
+            for (int i = 0; i < width; i++)
+            {
+                Block block = state[i, j];
+
+                if (block != null)
+                {
+                    Destroy(block.gameObject);
+                }
+            }
+
+            for (j += 1; j < height; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    // Move everything down
+                    Block block = state[i, j];
+                    state[i, j - 1] = block;
+
+                    if (block != null)
+                    {
+                        block.transform.Translate(Vector2.down, Space.World);
+                    }
+                }
             }
         }
 
