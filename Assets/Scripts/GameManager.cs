@@ -10,8 +10,10 @@ namespace Assets.Scripts
 
 
         [SerializeField] private float speed = 1f;
+        [SerializeField] private float fastFactor = 0.1f;
 
         private int score = 0;
+        private bool isFast;
 
         public delegate void ScoreHandler(int score);
         public event ScoreHandler OnScoreUpdate;
@@ -30,8 +32,27 @@ namespace Assets.Scripts
             OnScoreUpdate(score);
         }
 
+        private void Update()
+        {
+            isFast = Input.GetKey(KeyCode.S);
+        }
 
-        public float Speed => speed;
+
+        public float Speed
+        {
+            get
+            {
+                if (isFast)
+                {
+                    // Apply factor is enabled
+                    return speed * fastFactor;
+                }
+                else
+                {
+                    return speed;
+                }
+            }
+        }
 
         public void AddPoints(int points)
         {
