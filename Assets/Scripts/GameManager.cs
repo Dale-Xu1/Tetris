@@ -9,10 +9,12 @@ namespace Assets.Scripts
         public static GameManager Instance { get; private set; }
 
 
-        [SerializeField] private float speed = 1f;
+        [SerializeField] private float initialSpeed = 1f;
         [SerializeField] private float fastFactor = 0.1f;
 
         private int score = 0;
+
+        private float speed;
         private bool isFast;
 
         public delegate void ScoreHandler(int score);
@@ -29,6 +31,7 @@ namespace Assets.Scripts
 
         private void Start()
         {
+            speed = initialSpeed;
             OnScoreUpdate(score);
         }
 
@@ -38,27 +41,13 @@ namespace Assets.Scripts
         }
 
 
-        public float Speed
-        {
-            get
-            {
-                if (isFast)
-                {
-                    // Apply factor is enabled
-                    return speed * fastFactor;
-                }
-                else
-                {
-                    return speed;
-                }
-            }
-        }
+        public float Speed => isFast ? speed * fastFactor : speed;
 
         public void AddPoints(int points)
         {
             // Add points and broadcast event
             score += points;
-            speed = 1f - (score * 0.002f);
+            speed = initialSpeed / (score * 0.001f + 1f);
 
             OnScoreUpdate(score);
         }

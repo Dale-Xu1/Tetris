@@ -5,7 +5,7 @@ using Assets.Scripts.Tiles;
 
 namespace Assets.Scripts.Pieces
 {
-    class Piece : MonoBehaviour
+    partial class Piece : MonoBehaviour
     {
 
         [SerializeField] private int points = 4;
@@ -15,16 +15,13 @@ namespace Assets.Scripts.Pieces
 
         private void Start()
         {
-            GameManager gameManager = GameManager.Instance;
+            SetTimer();
 
             if (IsColliding(Vector2Int.down))
             {
                 // If piece is immediately invalid, game is over
-                gameManager.EndGame();
-                return;
+                GameManager.Instance.EndGame();
             }
-
-            nextTime = gameManager.Speed;
         }
 
         private void Update()
@@ -32,10 +29,11 @@ namespace Assets.Scripts.Pieces
             // Run every interval
             if (Time.time > nextTime)
             {
-                nextTime = Time.time + GameManager.Instance.Speed;
+                SetTimer();
 
                 if (IsColliding(Vector2Int.down))
                 {
+                    // Stop if colliding
                     Stop();
                 }
                 else
@@ -97,86 +95,15 @@ namespace Assets.Scripts.Pieces
             Destroy(gameObject);
         }
 
+
         public void ResetTimer()
         {
             nextTime = 0;
         }
 
-
-        public void Translate(Vector2Int translation)
+        private void SetTimer()
         {
-            // If translation causes collision
-            if (IsColliding(translation))
-            {
-                return;
-            }
-
-            Move(translation);
-        }
-
-        private void Move(Vector2 translation)
-        {
-            // Translate relative to the world
-            transform.Translate(translation, Space.World);
-        }
-
-
-        public void Rotate(float angle)
-        {
-            Vector3 position = transform.position;
-            Quaternion rotation = transform.rotation;
-
-            transform.Rotate(Vector3.forward, angle);
-            UnhookFromSide();
-
-            // Undo rotation if it causes collision
-            if (IsColliding(Vector2Int.zero))
-            {
-                transform.position = position;
-                transform.rotation = rotation;
-            }
-        }
-
-        private void UnhookFromSide()
-        {
-            while (true)
-            {
-                foreach (Transform child in transform)
-                {
-                    // Get block position
-                    Block block = child.GetComponent<Block>();
-                    Vector2Int position = block.Position;
-
-                    // If any is colliding with side
-                    switch (TileManager.Instance.IsCollidingWithSide(position))
-                    {
-                        case TileManager.Side.LEFT:
-                        {
-                            Move(Vector2.right);
-                            goto Continue;
-                        }
-
-                        case TileManager.Side.RIGHT:
-                        {
-                            Move(Vector2.left);
-                            goto Continue;
-                        }
-                    }
-                }
-
-                return;
-            Continue:;
-            }
-        }
-
-
-        public void Fall()
-        {
-            // Move down until it cannot
-            while (!IsColliding(Vector2Int.down))
-            {
-                Move(Vector2.down);
-            }
+            nextTime = Time.time + GameManager.Instance.Speed;
         }
 
     }
