@@ -10,25 +10,33 @@ namespace Assets.Scripts.Pieces
 
         [SerializeField] private int points = 4;
 
+        private float nextTime;
 
-        private IEnumerator Start()
+
+        private void Start()
         {
+            GameManager gameManager = GameManager.Instance;
+
             if (IsColliding(Vector2Int.down))
             {
                 // If piece is immediately invalid, game is over
-                GameManager.Instance.EndGame();
-                yield break;
+                gameManager.EndGame();
+                return;
             }
 
-            while (true)
+            nextTime = gameManager.Speed;
+        }
+
+        private void Update()
+        {
+            // Run every interval
+            if (Time.time > nextTime)
             {
-                // Wait delay
-                yield return new WaitForSeconds(GameManager.Instance.Speed);
+                nextTime = Time.time + GameManager.Instance.Speed;
 
                 if (IsColliding(Vector2Int.down))
                 {
                     Stop();
-                    break;
                 }
                 else
                 {
@@ -87,6 +95,11 @@ namespace Assets.Scripts.Pieces
             // Create new piece
             PieceManager.Instance.CreatePiece();
             Destroy(gameObject);
+        }
+
+        public void ResetTimer()
+        {
+            nextTime = 0;
         }
 
 

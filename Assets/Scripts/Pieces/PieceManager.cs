@@ -51,6 +51,12 @@ namespace Assets.Scripts.Pieces
             {
                 currentPiece.Fall();
             }
+
+            // Reset timer
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                currentPiece.ResetTimer();
+            }
         }
 
 
