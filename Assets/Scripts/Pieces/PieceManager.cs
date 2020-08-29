@@ -11,6 +11,7 @@ namespace Assets.Scripts.Pieces
 
         [SerializeField] private Piece[] pieces = null;
 
+        private int index = 0;
         private Piece currentPiece;
 
 
@@ -21,6 +22,7 @@ namespace Assets.Scripts.Pieces
 
         private void Start()
         {
+            ShufflePieces();
             CreatePiece();
         }
 
@@ -62,10 +64,31 @@ namespace Assets.Scripts.Pieces
 
         public void CreatePiece()
         {
-            // Selects and instantiates random piece
-            Piece piece = pieces[Random.Range(0, pieces.Length)];
+            // Selects and instantiates piece
+            Piece piece = pieces[index];
+
+            // If next index is out of bounds
+            index++;
+            if (index >= pieces.Length)
+            {
+                index = 0;
+                ShufflePieces();
+            }
 
             currentPiece = Instantiate(piece, transform);
+        }
+
+        private void ShufflePieces()
+        {
+            // Fisher yates shuffle
+            for (int i = 0; i < pieces.Length - 1; i++)
+            {
+                int j = Random.Range(i + 1, pieces.Length);
+
+                Piece temp = pieces[i];
+                pieces[i] = pieces[j];
+                pieces[j] = temp;
+            }
         }
 
     }
